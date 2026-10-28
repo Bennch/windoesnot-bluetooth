@@ -8,7 +8,7 @@ license=('GPL-3.0-or-later')
 depends=(gtk4 libadwaita bluez bluez-utils bluez-obex libpulse dbus)
 makedepends=(rust pkgconf blueprint-compiler gettext)
 options=('!lto' '!debug')
-source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/v$pkgver.tar.gz")
+source=("$pkgname-$pkgver.tar.gz::$url/archive/refs/tags/$pkgver.tar.gz")
 sha256sums=('SKIP')
 prepare() {
  cd "$srcdir/$pkgname-$pkgver"
