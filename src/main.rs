@@ -19,7 +19,8 @@
  */
 
 mod application;
-mod config;
+mod desktop;
+#[path = "windoesnot_config.rs"] mod config;
 mod window;
 #[path = "bluetooth/message.rs"] mod message;
 #[path = "bluetooth/bluetooth_settings.rs"] mod bluetooth_settings;
@@ -43,51 +44,31 @@ mod Singletons;
 use self::application::OverskrideApplication;
 use self::window::OverskrideWindow;
 
-use config::{GETTEXT_PACKAGE, LOCALEDIR, PKGDATADIR};
+use config::{GETTEXT_PACKAGE, LOCALEDIR};
 use gettextrs::{bind_textdomain_codeset, bindtextdomain, textdomain};
 use gtk::{gio, glib};
 use gtk::prelude::*;
 use gtk::gdk::Display;
 
 fn main() -> glib::ExitCode {
+    std::env::set_var("LANGUAGE", if desktop::language() == desktop::Language::De { "de" } else { "en" });
+    gettextrs::setlocale(gettextrs::LocaleCategory::LcAll, "");
+    gettextrs::setlocale(gettextrs::LocaleCategory::LcMessages, if desktop::language() == desktop::Language::De { "de_DE.UTF-8" } else { "en_US.UTF-8" });
     // Set up gettext translations
-    bindtextdomain(GETTEXT_PACKAGE, LOCALEDIR).expect("Unable to bind the text domain");
+    bindtextdomain(GETTEXT_PACKAGE, std::env::var("WINDOESNOT_BLUETOOTH_LOCALEDIR").unwrap_or_else(|_| LOCALEDIR.into())).expect("Unable to bind the text domain");
     bind_textdomain_codeset(GETTEXT_PACKAGE, "UTF-8")
         .expect("Unable to set the text domain encoding");
     textdomain(GETTEXT_PACKAGE).expect("Unable to switch to the text domain");
 
-    // Load resources
-    // let resources = gio::Resource::load(PKGDATADIR.to_owned() + "/overskride.gresource")
-        // .expect("Could not load resources");
-    // gio::resources_register(&resources);
-
-	let resources = match std::env::var("MESON_DEVENV") {
-    Err(_) => gio::Resource::load(PKGDATADIR.to_owned() + "/overskride.gresource")
-        .expect("Unable to find overskride.gresource"),
-    Ok(_) => match std::env::current_exe() {
-        Ok(path) => {
-            let mut resource_path = path;
-            resource_path.pop();
-            resource_path.push("overskride.gresource");
-            gio::Resource::load(&resource_path)
-                .expect("Unable to find overskride.gresource in devenv")
-            }
-            Err(err) => {
-                eprintln!("Unable to find the current path: {}", err);
-                return 1.into();
-            }
-        },
-    };
-
-    gio::resources_register(&resources);
+    gio::resources_register_include!("overskride.gresource").expect("Bluetooth UI resources");
 
     // Create a new GtkApplication. The application manages our main loop,
     // application windows, integration with the window manager/compositor, and
     // desktop features such as file opening and single-instance applications.
-    let app = OverskrideApplication::new("io.github.kaii_lb.Overskride", &gio::ApplicationFlags::empty());
+    let app = OverskrideApplication::new("me.windoesnot.Bluetooth", &gio::ApplicationFlags::empty());
 
 	app.connect_startup(|_| {
-		load_css()
+		load_css(); desktop::setup();
 	});
 
     // Run the application. This function will block until the application

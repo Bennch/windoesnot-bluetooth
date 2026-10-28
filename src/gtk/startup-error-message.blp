@@ -10,7 +10,7 @@ template $StartupErrorMessage : Adw.ApplicationWindow {
       [top]
       Adw.HeaderBar {
         title-widget: Adw.WindowTitle {
-          title: "Error";
+          title: _("Error");
         };
       }
       
@@ -22,8 +22,8 @@ template $StartupErrorMessage : Adw.ApplicationWindow {
         Adw.StatusPage {
           valign: start;
           icon-name: "heart-broken-symbolic";    
-          title: "An Error Occurred";     
-          description: "this usually happens when the bluetooth service is disabled";       
+          title: _("An Error Occurred");
+          description: _("this usually happens when the bluetooth service is disabled");
           
           Button run_enable_bluetooth_button {
             //orientation: vertical;
@@ -39,7 +39,7 @@ template $StartupErrorMessage : Adw.ApplicationWindow {
               margin-end: 16;
               
               Label {                
-                label: "in order to fix it, you could try:";
+                label: _("in order to fix it, you could try:");
                 use-markup: true;
                 justify: center;
               }
@@ -47,12 +47,12 @@ template $StartupErrorMessage : Adw.ApplicationWindow {
                 margin-top: 4;
                 margin-bottom: 4;
                 
-                label: "`sudo systemctl enable --now bluetooth`\n`sudo systemctl start bluetooth`";
+                label: _("`sudo systemctl enable --now bluetooth`\n`sudo systemctl start bluetooth`");
                 use-markup: true;
                 justify: center;
               }
               Label {
-                label: "or install the <span font_weight='bold' color='#78aeed'>bluez</span> package for your distro\n and run the above commands, then restart <span font_weight='bold' color='#78aeed'>Overskride</span>";
+                label: _("or install the <span font_weight='bold' color='#78aeed'>bluez</span> package for your distro\n and run the above commands, then restart <span font_weight='bold' color='#78aeed'>Overskride</span>");
                 use-markup: true;
                 justify: center;
               }

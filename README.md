@@ -1,3 +1,26 @@
+# WinDoesNot Bluetooth
+
+WinDoesNot Bluetooth adapts [Overskride](https://github.com/kaii-lb/overskride) for the WinDoesNot desktop.
+The upstream GPL license and author credits are retained.
+
+- Shared Store/Settings colours, wordmark, accent and automatic light/dark appearance.
+- Reads desktop preferences without changing them; German/English navigation.
+- Separate application identity and preferences; existing BlueZ pairings remain in place.
+- Native application launcher and taskbar/settings integration.
+
+Build with `cargo build --release --locked` (Blueprint compiler and gettext are required); native packaging uses `PKGBUILD`.
+
+## Screenshots
+
+Real native windows in dark and light mode, with hardware D-Bus intentionally
+isolated for privacy. The screenshots show empty/unavailable states, not a
+successful connection or pairing test.
+
+![Dark mode](docs/screenshots/home-dark.png)
+![Light mode](docs/screenshots/home-light.png)
+
+## Upstream documentation
+
 # Overskride
 A Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful :D
 

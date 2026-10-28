@@ -58,7 +58,7 @@ mod imp {
                 else {
                     let display = gtk::gdk::Display::default().unwrap();
                     let clipboard = gtk::prelude::DisplayExt::clipboard(&display);
-                    clipboard.set_text("sudo systemctl enable --now bluetooth");
+                    clipboard.set_text(crate::desktop::tr("sudo systemctl enable --now bluetooth"));
 
                     let toast = adw::Toast::new("copied command to clipboard");
                     toast.set_timeout(5);

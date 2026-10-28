@@ -1,0 +1,152 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: de\n"
+
+msgid "<b>No Transactions Ongoing</b>"
+msgstr "<b>Keine laufenden Übertragungen</b>"
+
+msgid "<span font_weight='bold' size='x-large'>Bluetooth Settings</span>"
+msgstr "<span font_weight='bold' size='x-large'>Bluetooth-Einstellungen</span>"
+
+msgid "Adapter Name"
+msgstr "Adaptername"
+
+msgid "Adapter Properties"
+msgstr "Adaptereigenschaften"
+
+msgid "All the devices you've connected to"
+msgstr "Bereits gekoppelte Geräte"
+
+msgid "An Error Occurred"
+msgstr "Ein Fehler ist aufgetreten"
+
+msgid "Audio Profile"
+msgstr "Audioprofil"
+
+msgid "Auto Accept"
+msgstr "Automatisch annehmen"
+
+msgid "Blocked"
+msgstr "Blockiert"
+
+msgid "Bluetooth Adapter Status"
+msgstr "Bluetooth-Adapterstatus"
+
+msgid "Bluetooth Settings"
+msgstr "Bluetooth-Einstellungen"
+
+msgid "Bluetooth connection information about this device."
+msgstr "Informationen zur Bluetooth-Verbindung dieses Geräts."
+
+msgid "Choose File"
+msgstr "Datei auswählen"
+
+msgid "Connected"
+msgstr "Verbunden"
+
+msgid "Connection Properties"
+msgstr "Verbindungseigenschaften"
+
+msgid "Current Bluetooth Adapter"
+msgstr "Aktueller Bluetooth-Adapter"
+
+msgid "Device Name"
+msgstr "Gerätename"
+
+msgid "Device Properties"
+msgstr "Geräteeigenschaften"
+
+msgid "Device Settings"
+msgstr "Geräteeinstellungen"
+
+msgid "Devices"
+msgstr "Geräte"
+
+msgid "Discoverable"
+msgstr "Sichtbar"
+
+msgid "Discoverable Timeout"
+msgstr "Dauer der Sichtbarkeit"
+
+msgid "Error"
+msgstr "Fehler"
+
+msgid "General Bluetooth Settings"
+msgstr "Allgemeine Bluetooth-Einstellungen"
+
+msgid "Hide Sidebar"
+msgstr "Seitenleiste ausblenden"
+
+msgid "Hide Unknown Devices"
+msgstr "Unbekannte Geräte ausblenden"
+
+msgid "Information about the current bluetooth adapter."
+msgstr "Informationen zum aktuellen Bluetooth-Adapter."
+
+msgid "Information about this bluetooth device."
+msgstr "Informationen zu diesem Bluetooth-Gerät."
+
+msgid "Manage how your system is set up."
+msgstr "Verwalte die Bluetooth-Einstellungen."
+
+msgid "More Info"
+msgstr "Weitere Informationen"
+
+msgid "No devices in range"
+msgstr "Keine Geräte in Reichweite"
+
+msgid "Open Main Menu"
+msgstr "Hauptmenü öffnen"
+
+msgid "Powered"
+msgstr "Eingeschaltet"
+
+msgid "Received Files Location"
+msgstr "Ordner für empfangene Dateien"
+
+msgid "Remove Device"
+msgstr "Gerät entfernen"
+
+msgid "Send File To Device"
+msgstr "Datei an das Gerät senden"
+
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgid "Status Information"
+msgstr "Statusinformationen"
+
+msgid "Stops Unknown Devices from showing up in device list"
+msgstr "Blendet unbekannte Geräte in der Geräteliste aus"
+
+msgid "System Settings"
+msgstr "Systemeinstellungen"
+
+msgid "The current state of this device"
+msgstr "Der aktuelle Status dieses Geräts"
+
+msgid "Trusted"
+msgstr "Vertrauenswürdig"
+
+msgid "What's this adapter doing?"
+msgstr "Status dieses Adapters"
+
+msgid "auto accept files from trusted devices?"
+msgstr "Dateien von vertrauenswürdigen Geräten automatisch annehmen?"
+
+msgid "in minutes"
+msgstr "in Minuten"
+
+msgid "this is an approximation"
+msgstr "Dies ist eine Schätzung"
+
+msgid "this is an approximation, depends on signal strength"
+msgstr "Schätzung anhand der Signalstärke"
+
+msgid "this usually happens when the bluetooth service is disabled"
+msgstr "Prüfe, ob Bluetooth verfügbar und der Bluetooth-Dienst aktiv ist."
+
+msgid "visible to others?"
+msgstr "Für andere Geräte sichtbar?"
+

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schemalist gettext-domain="overskride">
-	<schema id="io.github.kaii_lb.Overskride" path="/io/github/kaii_lb/Overskride/">
+<schemalist gettext-domain="windoesnot-bluetooth">
+	<schema id="me.windoesnot.Bluetooth" path="/me/windoesnot/Bluetooth/">
 		<key name="window-width" type="i">
-			<default>-1</default>
+			<default>1000</default>
 			<summary>default window width</summary>
 		</key>
 		<key name="window-height" type="i">
-			<default>-1</default>
+			<default>720</default>
 			<summary>default window height</summary>
 		</key>
 		<key name="window-maximized" type="b">

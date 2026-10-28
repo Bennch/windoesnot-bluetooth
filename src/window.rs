@@ -35,7 +35,7 @@ use crate::obex::{self, register_obex_agent};
 use crate::receiving_row::ReceivingRow;
 use crate::selectable_row::SelectableRow;
 use crate::services::get_name_from_service;
-use crate::startup_error_message::StartupErrorMessage;
+
 use crate::{bluetooth_settings, connected_switch_row::ConnectedSwitchRow, device};
 use crate::Singletons::OverskrideProperties;
 
@@ -131,6 +131,8 @@ mod imp {
         #[template_child]
         pub window_title: TemplateChild<adw::WindowTitle>,
         #[template_child]
+        pub title: TemplateChild<adw::WindowTitle>,
+        #[template_child]
         pub hide_unknowns_switch_row: TemplateChild<adw::SwitchRow>,
 
         pub settings: OnceCell<Settings>,
@@ -211,13 +213,19 @@ impl OverskrideWindow {
             .property("application", application)
             .build();
 
+        win.imp().title.set_title(crate::desktop::tr(""));
+        win.imp().title.set_visible(false);
+        win.imp().sidebar_content_box.set_orientation(gtk::Orientation::Vertical);
+        win.imp().sidebar_content_box.add_css_class("wdn-sidebar");
+        let brand = crate::desktop::brand("Bluetooth");
+        win.imp().sidebar_content_box.prepend(&brand);
         win.setup();
 
         win
     }
 
     fn setup_settings(&self) {
-        let settings = Settings::new("io.github.kaii_lb.Overskride");
+        let settings = Settings::new("me.windoesnot.Bluetooth");
         self.imp()
             .settings
             .set(settings)
@@ -232,22 +240,18 @@ impl OverskrideWindow {
         // suggest solutions
         // then profit
         if let Err(err) = self.pre_setup(sender.clone()) {
-            println!("ERROR: cannot start presetup, something got REALLY fucked");
-            println!("error is: {:?}", err);
-
-            let clone = self.clone();
-            let message = StartupErrorMessage::new();
-
-            message.set_transient_for(Some(&clone));
-            message.set_modal(true);
-
-            // clone.set_sensitive(false);
-            message.connect_destroy(move |_| {
-                WidgetExt::activate_action(&clone, "app.quit", None)
-                    .expect("cannot exit app on message close");
-            });
-
-            message.set_visible(true);
+            eprintln!("Bluetooth service unavailable: {err}");
+            let content = gtk::Box::new(gtk::Orientation::Vertical, 0);
+            content.append(&crate::desktop::brand("Bluetooth"));
+            let close = gtk::Button::with_label(crate::desktop::tr("Close"));
+            close.set_halign(gtk::Align::Center);
+            close.set_action_name(Some("app.quit"));
+            let status = adw::StatusPage::builder()
+                .title(crate::desktop::tr("Bluetooth unavailable"))
+                .description(crate::desktop::tr("No Bluetooth adapter or service is available. Check that your adapter is connected and Bluetooth is enabled."))
+                .icon_name("bluetooth-disabled-symbolic").child(&close).build();
+            status.set_vexpand(true); content.append(&status);
+            self.set_content(Some(&content));
             return;
         }
 
@@ -437,7 +441,7 @@ impl OverskrideWindow {
                         }
 
                         let window_title = clone.imp().window_title.get();
-                        window_title.set_title("Device");
+                        window_title.set_title(crate::desktop::tr("Device"));
                     }
                     Message::SwitchAdapterPowered(powered) => {
                         let powered_switch_row = clone.imp().powered_switch_row.get();
@@ -694,7 +698,7 @@ impl OverskrideWindow {
                                 title += "<span font_weight='regular'>";
                             }
                         }
-                        let label = gtk::Label::new(Some(""));
+                        let label = gtk::Label::new(Some(crate::desktop::tr("")));
                         boxholder.append(&label);
 
                         title += title_holder;
@@ -744,7 +748,7 @@ impl OverskrideWindow {
                         popup.set_close_response("cancel");
 
                         let entry = gtk::Entry::new();
-                        entry.set_placeholder_text(Some("12345 or abcde"));
+                        entry.set_placeholder_text(Some(crate::desktop::tr("12345 or abcde")));
                         popup.set_extra_child(Some(&entry));
                         popup.set_response_enabled("confirm", false);
 
@@ -820,7 +824,7 @@ impl OverskrideWindow {
                         popup.set_default_response(Some("confirm"));
 
                         let entry = gtk::Entry::new();
-                        entry.set_placeholder_text(Some("0-999999"));
+                        entry.set_placeholder_text(Some(crate::desktop::tr("0-999999")));
                         entry.set_input_purpose(gtk::InputPurpose::Digits);
                         entry.set_max_length(6);
 
@@ -1009,7 +1013,7 @@ impl OverskrideWindow {
                         let popup = adw::MessageDialog::new(Some(&clone), Some("Service Authorization Request"), None);
 
                         let body = "Is <span font_weight='bold' color='#78aeed'>`".to_string() + service_id.as_str() + "`</span> allowed to be authorized?\nRequest by <span font_weight='bold'>`" + device.as_str() + "`</span> on <span font_weight='bold'>`" + adapter.as_str() + "`</span>.";
-                        let label = gtk::Label::new(Some(""));
+                        let label = gtk::Label::new(Some(crate::desktop::tr("")));
                         label.set_use_markup(true);
                         label.set_label(body.as_str());
                         popup.set_extra_child(Some(&label));
@@ -1044,7 +1048,7 @@ impl OverskrideWindow {
                             bluetooth_settings_row.emit_activate();
 
                             let window_title = clone.imp().window_title.get();
-                            window_title.set_title("Settings");
+                            window_title.set_title(crate::desktop::tr("Settings"));
                         } else {
                             let listbox = clone.imp().main_listbox.get();
 
@@ -1053,7 +1057,7 @@ impl OverskrideWindow {
                             }
 
                             let window_title = clone.imp().window_title.get();
-                            window_title.set_title("Settings");
+                            window_title.set_title(crate::desktop::tr("Settings"));
                         }
                     }
                     Message::RequestYesNo(title, subtitle, confirm, response_type) => {
@@ -1745,7 +1749,7 @@ impl OverskrideWindow {
             }
 
             let window_title = self_clone3.imp().window_title.get();
-            window_title.set_title("Settings");
+            window_title.set_title(crate::desktop::tr("Settings"));
         });
         bluetooth_settings_row.emit_activate();
 
@@ -2083,7 +2087,7 @@ async fn add_child_row(device: bluer::Device) -> bluer::Result<DeviceActionRow> 
     // then replace with "Unknown Device" because its cleaner
     if let Ok(bad_title) = bluer::Address::from_str(name.clone().replace('-', ":").as_str()) {
         name = "Unknown Device".to_string();
-        child_row.set_title("Unknown Device");
+        child_row.set_title(crate::desktop::tr("Unknown Device"));
 
         // child_row.set_subtitle(bad_title.to_string().as_str());
         println!("broken device title is {:?}", bad_title);

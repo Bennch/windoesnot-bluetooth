@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=WinDoesNot Bluetooth
+Name[de]=WinDoesNot Bluetooth
+Comment=Manage Bluetooth devices and connections
+Comment[de]=Bluetooth-Geräte und Verbindungen verwalten
+Exec=windoesnot-bluetooth
+Icon=me.windoesnot.Bluetooth
+Terminal=false
+Categories=Settings;HardwareSettings;
+StartupNotify=true

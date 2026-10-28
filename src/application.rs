@@ -100,7 +100,7 @@ impl OverskrideApplication {
         let window = self.active_window().unwrap();
         let about = adw::AboutWindow::builder()
             .transient_for(&window)
-            .application_name("Overskride")
+            .application_name("WinDoesNot Bluetooth")
             .application_icon("io.github.kaii_lb.Overskride")
             .developer_name("kaii")
             .version(VERSION)
@@ -113,8 +113,8 @@ impl OverskrideApplication {
 				<li>added a distance approximation in more info page</li>
             </ol>
             ")
-            .issue_url("https://github.com/kaii-lb/overskride/issues")
-            .website("https://github.com/kaii-lb/overskride")
+            .issue_url("https://github.com/Bennch/windoesnot-bluetooth/issues")
+            .website("https://github.com/Bennch/windoesnot-bluetooth")
             .build();
 
         about.present();

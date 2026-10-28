@@ -9,7 +9,7 @@ template $MoreInfoPage : Adw.ApplicationWindow {
     [top]
     Adw.HeaderBar {
       title-widget: Adw.WindowTitle {
-        title: "More Info";
+        title: _("More Info");
       };
     }
     
@@ -39,7 +39,7 @@ template $MoreInfoPage : Adw.ApplicationWindow {
           }
           Adw.ActionRow distance_row {
           	title-selectable: true;
-          	tooltip-text: "this is an approximation, depends on signal strength";
+           tooltip-text: _("this is an approximation, depends on signal strength");
           }
           Adw.ExpanderRow services_row {
           	title-selectable: true;

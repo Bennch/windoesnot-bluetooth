@@ -954,26 +954,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "42f5e15c9953c5e4ccceeb2e7382a716482c34515315f7b03532b8b4e8393d2d"
 
 [[package]]
-name = "overskride"
-version = "0.6.5"
-dependencies = [
- "async-channel",
- "bluer",
- "dbus",
- "dbus-crossroads",
- "futures",
- "gettext-rs",
- "gtk4",
- "lazy_static",
- "libadwaita",
- "libpulse-binding",
- "phf",
- "tokio",
- "tokio-util",
- "uuid",
-]
-
-[[package]]
 name = "pango"
 version = "0.21.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1595,6 +1575,26 @@ name = "winapi-x86_64-pc-windows-gnu"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "712e227841d057c1ee1cd2fb22fa7e5a5461ae8e48fa2ca79ec42cfc1931183f"
+
+[[package]]
+name = "windoesnot-bluetooth"
+version = "0.1.0"
+dependencies = [
+ "async-channel",
+ "bluer",
+ "dbus",
+ "dbus-crossroads",
+ "futures",
+ "gettext-rs",
+ "gtk4",
+ "lazy_static",
+ "libadwaita",
+ "libpulse-binding",
+ "phf",
+ "tokio",
+ "tokio-util",
+ "uuid",
+]
 
 [[package]]
 name = "windows-link"

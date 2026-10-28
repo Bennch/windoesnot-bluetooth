@@ -11,7 +11,7 @@ template $ReceivingRow : ListBoxRow {
 
         start-widget: Label title_label {
             halign: start;
-            label: "“this is a video.mp4”";
+            label: _("“this is a video.mp4”");
             ellipsize: end;
             max-width-chars: 30;
         };
@@ -26,7 +26,7 @@ template $ReceivingRow : ListBoxRow {
         end-widget: Label extra_label {
             halign: start;
             use-markup: true;
-            label: "<small>45% | 13/423 MB</small>";
+            label: _("<small>45% | 13/423 MB</small>");
             styles ["dim-label"]
         };
         }

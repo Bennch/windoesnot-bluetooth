@@ -11,7 +11,7 @@ template $OverskrideWindow: Adw.ApplicationWindow {
       split_view.collapsed: true;
       split_view.show-sidebar: false;
       //headerbar.show-title: false;
-      //navigation_page.title: "Device Settings";
+      //navigation_page.title: _("Device Settings");
       show_sidebar_button.active: false;
     }
   }
@@ -27,8 +27,8 @@ template $OverskrideWindow: Adw.ApplicationWindow {
       sidebar-position: start;
       sidebar-width-fraction: 0.4;
       sidebar-width-unit: sp;
-      min-sidebar-width: 300;
-      max-sidebar-width: 350;
+      min-sidebar-width: 250;
+      max-sidebar-width: 280;
       styles ["view"]
 
 
@@ -40,7 +40,7 @@ template $OverskrideWindow: Adw.ApplicationWindow {
           title-widget: Adw.WindowTitle title {
             halign: center;
             margin-start: 24;
-            title: "Overskride";
+            title: _("WinDoesNot Bluetooth");
           };
 
           [start]
@@ -66,25 +66,25 @@ template $OverskrideWindow: Adw.ApplicationWindow {
             spacing: 28;
 
             Adw.PreferencesGroup {
-              title: "Settings";
-              description: "General Bluetooth Settings";
+              title: _("Settings");
+              description: _("General Bluetooth Settings");
               
               ListBox secondary_listbox {
                 styles ["boxed-list"]
                 Adw.ActionRow bluetooth_settings_row {
-                  title: "Bluetooth Settings";
+                  title: _("Bluetooth Settings");
                   activatable: true;
                 }
               }
             }
 
             Adw.PreferencesGroup {
-              title: "Devices";
-              description: "All the devices you've connected to";
+              title: _("Devices");
+              description: _("All the devices you've connected to");
 
               Box listbox_image_box {
                 height-request: 250;
-                width-request: 250;
+                width-request: 200;
                 orientation: vertical;
                 visible: true;
 
@@ -108,7 +108,7 @@ template $OverskrideWindow: Adw.ApplicationWindow {
                     }
 
                     Label {
-                      label: "No devices in range";
+                      label: _("No devices in range");
                       opacity: 0.4;
                     }                    
                   };
@@ -133,16 +133,16 @@ template $OverskrideWindow: Adw.ApplicationWindow {
                   visible: false;
 
                    // Adw.ActionRow {
-                   //   title: "Bluetooth Headphones";
-                   //   subtitle: "dummy, doesn't work";
+                   //   title: _("Bluetooth Headphones");
+                   //   subtitle: _("dummy, doesn't work");
                    // }
                    // Adw.ActionRow {
-                   //   title: "Mom's Phone";
-                   //   subtitle: "dummy, doesn't work";
+                   //   title: _("Mom's Phone");
+                   //   subtitle: _("dummy, doesn't work");
                    // }
                    // Adw.ActionRow {
-                   //   title: "HP Laptop";
-                   //   subtitle: "dummy, doesn't work";
+                   //   title: _("HP Laptop");
+                   //   subtitle: _("dummy, doesn't work");
                    // }              
                 }                
               }
@@ -156,14 +156,14 @@ template $OverskrideWindow: Adw.ApplicationWindow {
           title-widget: Adw.WindowTitle window_title {
             halign: center;
             //margin-start: 16;
-            title: "Settings";
+            title: _("Settings");
           };
           
           Box {
             ToggleButton show_sidebar_button {
               icon-name: "dock-left-symbolic";
               active: true;
-              tooltip-text: "Hide Sidebar";
+              tooltip-text: _("Hide Sidebar");
             }
           }
 
@@ -171,7 +171,7 @@ template $OverskrideWindow: Adw.ApplicationWindow {
           MenuButton menu_drop_down {
             icon-name: "open-menu-symbolic";
             menu-model: primary_menu;
-            tooltip-text: "Open Main Menu";   
+            tooltip-text: _("Open Main Menu");
           }
         }
 
@@ -215,76 +215,76 @@ template $OverskrideWindow: Adw.ApplicationWindow {
                     pixel-size: 80;
                   }
                   Label device_title {
-                    label: "<span font_weight='bold' size='x-large'>Bluetooth Settings</span>";
+                    label: _("<span font_weight='bold' size='x-large'>Bluetooth Settings</span>");
                     use-markup: true;
                   }
                 }
 
                   Adw.PreferencesGroup {
-                    title: "Connection Properties";
-                    description: "Bluetooth connection information about this device.";
+                    title: _("Connection Properties");
+                    description: _("Bluetooth connection information about this device.");
 
                     $ConnectedSwitchRow connected_switch_row {
-                      title: "Connected";
+                      title: _("Connected");
                     }
                     Adw.ExpanderRow audio_profile_expander {
-                      title: "Audio Profile";
+                      title: _("Audio Profile");
                       show-enable-switch: true;
                       sensitive: false;
 
                       // Adw.ActionRow audio_profile_1 {
                       //   styles ["flat"]
-                      //   title: "A2DP Sink";
+                      //   title: _("A2DP Sink");
                       //   activatable: true;
                       // }
                       // Adw.ActionRow audio_profile_2 {
                       //   styles ["flat"]
-                      //   title: "Handsfree HSP/HFP";
+                      //   title: _("Handsfree HSP/HFP");
                       //   activatable: true;
                       // }
                     }
                     Adw.ActionRow send_file_row {
-                      title: "Send File To Device";
+                      title: _("Send File To Device");
 
                       [suffix]
                       Box {
                         margin-top: 6;
                         margin-bottom: 6;
                         Button choose_file_button {
-                          label: "Choose File";
+                          label: _("Choose File");
                         }
                       }
                     }
                   }
 
                   Adw.PreferencesGroup {
-                    title: "Device Properties";
-                    description: "Information about this bluetooth device.";
+                    title: _("Device Properties");
+                    description: _("Information about this bluetooth device.");
 
                     Adw.EntryRow device_name_entry {
-                      title: "Device Name";
+                      title: _("Device Name");
                       text: "Bluetooth Headset";
                       input-purpose: alpha;
                       show-apply-button: true;
                     }
                     Adw.SwitchRow trusted_row {
-                      title: "Trusted";
+                      title: _("Trusted");
                     }
                     Adw.SwitchRow blocked_row {
-                      title: "Blocked";
+                      title: _("Blocked");
                     }
                   }
 
                   Adw.PreferencesGroup {
-                    title: "Status Information";
-                    description: "The current state of this device";
+                    title: _("Status Information");
+                    description: _("The current state of this device");
 
                     $BatteryLevelIndicator battery_level_indicator {
                       styles ["linked"]
                     }
 
                     Adw.ActionRow more_info_row {
-                      title: "More Info";
+                      title: _("More Info");
                       activatable: true; 
                       // sensitive: false;
 
@@ -301,7 +301,7 @@ template $OverskrideWindow: Adw.ApplicationWindow {
                   Adw.PreferencesGroup {
                     Button remove_device_button {
                       styles ["destructive-action"]
-                      label: "Remove Device";
+                      label: _("Remove Device");
                     }
                   }
                 }
@@ -344,38 +344,38 @@ template $OverskrideWindow: Adw.ApplicationWindow {
                       pixel-size: 80;
                     }
                     Label {
-                      label: "<span font_weight='bold' size='x-large'>Bluetooth Settings</span>";
+                      label: _("<span font_weight='bold' size='x-large'>Bluetooth Settings</span>");
                       use-markup: true;
                     }
                   }
 
                   Adw.PreferencesGroup {
-                    title: "Bluetooth Adapter Status";
-                    description: "What's this adapter doing?";
+                    title: _("Bluetooth Adapter Status");
+                    description: _("What's this adapter doing?");
 
                     Adw.SwitchRow powered_switch_row {
-                      title: "Powered";
+                      title: _("Powered");
                     }
 
                     Adw.SwitchRow discoverable_switch_row {
-                      title: "Discoverable";
-                      subtitle: "visible to others?";
+                      title: _("Discoverable");
+                      subtitle: _("visible to others?");
                     }
                   }
 
                   Adw.PreferencesGroup {
-                    title: "Adapter Properties";
-                    description: "Information about the current bluetooth adapter.";
+                    title: _("Adapter Properties");
+                    description: _("Information about the current bluetooth adapter.");
 
                     Adw.ExpanderRow default_controller_expander {
-                      title: "Current Bluetooth Adapter";
+                      title: _("Current Bluetooth Adapter");
                       show-enable-switch: false;
                       // sensitive: false;
 
                       Adw.ActionRow adapter_1 {
                         styles ["flat"]
 
-                        title: "Bluetooth Dongle";
+                        title: _("Bluetooth Dongle");
                         activatable: true;
 
                         [suffix]
@@ -389,22 +389,22 @@ template $OverskrideWindow: Adw.ApplicationWindow {
                       Adw.ActionRow adapter_2 {
                         styles ["flat"]
 
-                        title: "Integrated Controller";
+                        title: _("Integrated Controller");
                         activatable: true;
                       }
                     }
 
                     Adw.SpinRow timeout_row {
-                      title: "Discoverable Timeout";
+                      title: _("Discoverable Timeout");
                       enable-undo: true;
-                      subtitle: "in minutes";
+                      subtitle: _("in minutes");
                       climb-rate: 100;
                       wrap: true;
                       adjustment: timeout_time_adjustment;
                     }
 
                     Adw.EntryRow adapter_name_entry {
-                      title: "Adapter Name";
+                      title: _("Adapter Name");
                       text: "Bluetooth Dongle";
                       input-purpose: alpha;
                       show-apply-button: true;
@@ -412,17 +412,17 @@ template $OverskrideWindow: Adw.ApplicationWindow {
                   }
 
                   Adw.PreferencesGroup {
-                    title: "System Settings";
-                    description: "Manage how your system is set up.";
+                    title: _("System Settings");
+                    description: _("Manage how your system is set up.");
 
                     Adw.SwitchRow auto_accept_trusted_row {
-                      title: "Auto Accept";
-                      subtitle: "auto accept files from trusted devices?";
+                      title: _("Auto Accept");
+                      subtitle: _("auto accept files from trusted devices?");
                       // sensitive: false;
                     }
 
                     Adw.EntryRow file_save_location {
-                      title: "Received Files Location";
+                      title: _("Received Files Location");
                       text: "/home/$USER/Downloads/Bluetooth/";
                       show-apply-button: true;
                       // sensitive: false;
@@ -439,8 +439,8 @@ template $OverskrideWindow: Adw.ApplicationWindow {
                       }
                     }
                     Adw.SwitchRow hide_unknowns_switch_row {
-                      title: "Hide Unknown Devices";
-                      subtitle: "Stops Unknown Devices from showing up in device list";
+                      title: _("Hide Unknown Devices");
+                      subtitle: _("Stops Unknown Devices from showing up in device list");
                     }                    
                   }
                 }

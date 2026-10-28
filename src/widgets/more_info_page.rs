@@ -79,7 +79,7 @@ impl MoreInfoPage {
 		self.imp().distance_row.get().set_title(&("Distance: ".to_string() + &distance));
 
 		let expander_row = self.imp().services_row.get();
-		expander_row.set_title("Available Services");
+		expander_row.set_title(crate::desktop::tr("Available Services"));
 		if services_list.is_empty() {
 			expander_row.set_sensitive(false);
 		}
