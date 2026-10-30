@@ -103,8 +103,6 @@ mod imp {
         #[template_child]
         pub split_view: TemplateChild<adw::OverlaySplitView>,
         #[template_child]
-        pub show_sidebar_button: TemplateChild<gtk::ToggleButton>,
-        #[template_child]
         pub toast_overlay: TemplateChild<adw::ToastOverlay>,
         #[template_child]
         pub listbox_image_box: TemplateChild<gtk::Box>,
@@ -1752,21 +1750,6 @@ impl OverskrideWindow {
             window_title.set_title(crate::desktop::tr("Settings"));
         });
         bluetooth_settings_row.emit_activate();
-
-        // show or hide the sidebar
-        let split_view = self.imp().split_view.get();
-        let self_clone4 = self.clone();
-        split_view.connect_show_sidebar_notify(move |view| {
-            let show_sidebar_button = self_clone4.imp().show_sidebar_button.get();
-            let active = view.shows_sidebar();
-
-            let text = match active {
-                true => "Hide Sidebar",
-                false => "Show Sidebar",
-            };
-            show_sidebar_button.set_tooltip_text(Some(text));
-            show_sidebar_button.set_active(active);
-        });
 
         // choose the file to be sent to the selected device
         let choose_file_button = self.imp().choose_file_button.get();

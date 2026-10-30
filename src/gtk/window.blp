@@ -12,14 +12,13 @@ template $OverskrideWindow: Adw.ApplicationWindow {
       split_view.show-sidebar: false;
       //headerbar.show-title: false;
       //navigation_page.title: _("Device Settings");
-      show_sidebar_button.active: false;
     }
   }
 
-  content: Adw.ToastOverlay toast_overlay {    
-    child: Adw.OverlaySplitView split_view { 
+  content: Adw.ToastOverlay toast_overlay {
+    child: Adw.OverlaySplitView split_view {
       pin-sidebar: false;
-      show-sidebar: bind show_sidebar_button.active;
+      show-sidebar: true;
       enable-hide-gesture: true;
       enable-show-gesture: true;
       halign: fill;
@@ -159,14 +158,6 @@ template $OverskrideWindow: Adw.ApplicationWindow {
             title: _("Settings");
           };
           
-          Box {
-            ToggleButton show_sidebar_button {
-              icon-name: "dock-left-symbolic";
-              active: true;
-              tooltip-text: _("Hide Sidebar");
-            }
-          }
-
           [end]
           MenuButton menu_drop_down {
             icon-name: "open-menu-symbolic";
