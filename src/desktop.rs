@@ -222,20 +222,68 @@ pub fn setup() {
 window, .background {{ background-color:{bg}; color:{fg}; font-family:Sans; font-size:14px; }}
 headerbar {{ background:{bg}; box-shadow:none; border-bottom:1px solid {border}; }}
 .wdn-sidebar, .sidebar {{ background:{sidebar}; }}
-.wdn-brand {{ padding:28px 16px 24px; }}
+.wdn-brand {{ padding:40px 20px 30px; }}
 .wdn-brand label {{ font-size:18px; font-weight:700; }}
-.wdn-navigation {{ background:transparent; padding:0 8px; }}
-.wdn-navigation row {{ min-height:44px; margin:3px 0; border-radius:{radius}px; padding:0 14px; }}
-.wdn-navigation row:selected {{ background:{selected}; color:{fg}; box-shadow:inset 3px 0 {accent}; }}
-.boxed-list {{ border-radius:{radius}px; border:1px solid {border}; background:{card}; box-shadow:none; }}
+.wdn-navigation {{ background:transparent; border:none; padding:0 10px; }}
+.wdn-navigation row {{ min-height:45px; margin:0 0 8px 0; padding:0; border-radius:6px; background:transparent; box-shadow:none; outline:none; }}
+.wdn-navigation row:hover {{ background:alpha({fg},0.07); }}
+.wdn-navigation row:selected, .wdn-navigation row:selected:hover {{ background:{selected}; color:{fg}; box-shadow:none; }}
+.wdn-nav-row {{ padding:0 10px 0 4px; }}
+.wdn-nav-indicator {{ border-radius:2px; background:transparent; }}
+.wdn-navigation row:selected .wdn-nav-indicator {{ background:{accent}; }}
+/* Only the rows are cards; no second frame around the whole list. */
+.boxed-list {{ border:none; background:transparent; box-shadow:none; }}
+.boxed-list > row {{ margin:4px 0; border-radius:{radius}px; background:{card}; border:1px solid {border}; box-shadow:none; }}
+.boxed-list > row:hover {{ background:alpha({fg},0.06); }}
 .card {{ border-radius:{radius}px; background:{card}; border-color:{border}; box-shadow:none; }}
 button {{ border-radius:{radius}px; box-shadow:none; }}
+/* The value shown inside a drop-down row is a one-row list. The card rule for
+   `.boxed-list row` also hit that inner row and framed it. */
+row.combo listview.inline, row.combo listview.inline > row, row.combo listview.inline row {{
+  margin:0; padding:0; min-height:0; border:none; border-radius:0;
+  background:transparent; background-color:transparent; box-shadow:none; outline:none; }}
+row.combo listview.inline row:hover {{ background:transparent; }}
+/* Popups (drop-down lists, context menus): plain rows, not the cards used in pages. */
+/* The window rule above also paints the popup's outer node (it has the class
+   "background"): that was the rectangle behind the menu. Only `contents` is drawn. */
+popover, popover.background, popover.menu, popover.background.menu {{ background:transparent; background-color:transparent; border:none; box-shadow:none; padding:0; }}
+popover > contents {{ background:{card}; border:1px solid {border}; border-radius:{radius}px; padding:4px; box-shadow:0 6px 24px alpha(black,0.25); }}
+popover contents > *, popover listview, popover list, popover scrolledwindow, popover scrolledwindow > *, popover box {{ background:transparent; background-color:transparent; border:none; box-shadow:none; outline:none; }}
+popover row, popover .boxed-list row, popover listview > row, popover list > row {{
+  margin:2px 0; padding:0 10px; min-height:36px; border-radius:6px;
+  background:transparent; border:none; box-shadow:none; outline:none; color:{fg}; }}
+popover row:hover {{ background:alpha({fg},0.08); }}
+popover row:selected, popover row:selected:hover {{ background:alpha({accent},0.22); color:{fg}; }}
+popover row label {{ margin:0; }}
+popover.menu button {{ border-radius:6px; padding:8px 12px; }}
+popover.menu button:hover {{ background:alpha({fg},0.08); }}
 button.suggested-action {{ background:{accent}; color:{accent_fg}; }}
 "#, accent_fg=accent_foreground(&accent));
         provider.load_from_data(&css);
     };
     refresh();
     watch(refresh);
+}
+
+/// Sidebar entry as in the Store: accent bar (selected only), icon, label.
+pub fn nav_row(icon_name: &str, title: &str) -> gtk::ListBoxRow {
+    let content = gtk::Box::new(gtk::Orientation::Horizontal, 12);
+    content.add_css_class("wdn-nav-row");
+    let indicator = gtk::Box::new(gtk::Orientation::Vertical, 0);
+    indicator.add_css_class("wdn-nav-indicator");
+    indicator.set_size_request(3, 22);
+    indicator.set_valign(gtk::Align::Center);
+    let icon = gtk::Image::from_icon_name(icon_name);
+    icon.set_pixel_size(20);
+    let label = gtk::Label::new(Some(title));
+    label.set_xalign(0.0);
+    label.set_hexpand(true);
+    content.append(&indicator);
+    content.append(&icon);
+    content.append(&label);
+    let row = gtk::ListBoxRow::new();
+    row.set_child(Some(&content));
+    row
 }
 
 pub fn brand(title: &str) -> gtk::Box {

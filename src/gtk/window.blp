@@ -1,46 +1,57 @@
 using Gtk 4.0;
 using Adw 1;
 
+using Gtk 4.0;
+using Adw 1;
+
 template $OverskrideWindow: Adw.ApplicationWindow {
   width-request: 475;
   height-request: 575;
 
-  Adw.Breakpoint breakpoint {
-    condition ("max-width: 700sp")
-    setters {
-      split_view.collapsed: true;
-      split_view.show-sidebar: false;
-      //headerbar.show-title: false;
-      //navigation_page.title: _("Device Settings");
-    }
-  }
-
   content: Adw.ToastOverlay toast_overlay {
-    child: Adw.OverlaySplitView split_view {
-      pin-sidebar: false;
-      show-sidebar: true;
-      enable-hide-gesture: true;
-      enable-show-gesture: true;
-      halign: fill;
-      valign: fill;
-      sidebar-position: start;
-      sidebar-width-fraction: 0.4;
-      sidebar-width-unit: sp;
-      min-sidebar-width: 250;
-      max-sidebar-width: 280;
-      styles ["view"]
+    child: Box root_box {
+      orientation: horizontal;
 
+      // Left navigation in the WinDoesNot style; the brand and the entries are added in code.
+      Box sidebar_content_box {
+        orientation: vertical;
+        width-request: 250;
+        hexpand: false;
+        spacing: 0;
+        styles ["wdn-sidebar"]
 
-      sidebar: Adw.ToolbarView toolbar_view {
-      	top-bar-style: flat;
-      	
+        // Logic anchors kept from the original layout, not shown.
+        Adw.WindowTitle title {
+          visible: false;
+        }
+
+        ListBox secondary_listbox {
+          visible: false;
+
+          Adw.ActionRow bluetooth_settings_row {
+            title: _("Bluetooth Settings");
+            activatable: true;
+          }
+        }
+      }
+
+      Adw.ToolbarView {
+        hexpand: true;
+
         [top]
-        Adw.HeaderBar {
-          title-widget: Adw.WindowTitle title {
+        Adw.HeaderBar headerbar {
+          title-widget: Adw.WindowTitle window_title {
             halign: center;
-            margin-start: 24;
-            title: _("WinDoesNot Bluetooth");
+            title: _("Devices");
           };
+
+          [start]
+          Button back_button {
+            icon-name: "go-previous-symbolic";
+            tooltip-text: _("Back");
+            visible: false;
+            styles ["flat"]
+          }
 
           [start]
           MenuButton show_popup_button {
@@ -49,115 +60,7 @@ template $OverskrideWindow: Adw.ApplicationWindow {
             popover: $ReceivingPopover receiving_popover {};
             styles ["flat"]
           }
-        }
-        content: Box sidebar_content_box {
-          //title: _("Sidebar");
-          styles ["compact"]
-          margin-top: 12;
-          margin-bottom: 12;
-          margin-start: 12;
-          margin-end: 12;
-          
-          Box {
-            //width-request: 350;
-            valign: fill;
-            orientation: vertical;
-            spacing: 28;
 
-            Adw.PreferencesGroup {
-              title: _("Settings");
-              description: _("General Bluetooth Settings");
-              
-              ListBox secondary_listbox {
-                styles ["boxed-list"]
-                Adw.ActionRow bluetooth_settings_row {
-                  title: _("Bluetooth Settings");
-                  activatable: true;
-                }
-              }
-            }
-
-            Adw.PreferencesGroup {
-              title: _("Devices");
-              description: _("All the devices you've connected to");
-
-              Box listbox_image_box {
-                height-request: 250;
-                width-request: 200;
-                orientation: vertical;
-                visible: true;
-
-                Frame {
-                  height-request: 250;
-
-                  child: Box {
-                    valign: center;
-                    halign: center;
-                    orientation: vertical;
-                    spacing: 20;
-
-                    Image {
-                      valign: center;
-                      halign: center;
-
-                      icon-name: "no-bluetooth-symbolic";
-                      pixel-size: 52;
-                      opacity: 0.4;
-                    
-                    }
-
-                    Label {
-                      label: _("No devices in range");
-                      opacity: 0.4;
-                    }                    
-                  };
-                }
-              }
-            
-              ScrolledWindow {
-                propagate-natural-height: true;
-                styles ["flat"]
-                kinetic-scrolling: true;
-                overlay-scrolling: true;
-                
-                [start]
-                ListBox main_listbox {
-                  margin-top: 12;
-                  margin-bottom: 12;
-                  margin-start: 1;
-                  margin-end: 1;
-                  styles [ "boxed-list", "separators" ]
-                  valign: fill;
-                  // height-request: 250;
-                  visible: false;
-
-                   // Adw.ActionRow {
-                   //   title: _("Bluetooth Headphones");
-                   //   subtitle: _("dummy, doesn't work");
-                   // }
-                   // Adw.ActionRow {
-                   //   title: _("Mom's Phone");
-                   //   subtitle: _("dummy, doesn't work");
-                   // }
-                   // Adw.ActionRow {
-                   //   title: _("HP Laptop");
-                   //   subtitle: _("dummy, doesn't work");
-                   // }              
-                }                
-              }
-            }
-          }
-        };
-      };
-      content: Adw.ToolbarView {
-        [top]
-        Adw.HeaderBar headerbar {
-          title-widget: Adw.WindowTitle window_title {
-            halign: center;
-            //margin-start: 16;
-            title: _("Settings");
-          };
-          
           [end]
           MenuButton menu_drop_down {
             icon-name: "open-menu-symbolic";
@@ -167,11 +70,13 @@ template $OverskrideWindow: Adw.ApplicationWindow {
         }
 
         Stack main_stack {
-          valign: start;
+          valign: fill;
+          vexpand: true;
           halign: fill;
           transition-type: slide_left_right;
 
           StackPage device_settings_page {
+            name: "device";
             child: ScrolledWindow device_status_page {
               valign: start;
               propagate-natural-height: true;
@@ -301,6 +206,7 @@ template $OverskrideWindow: Adw.ApplicationWindow {
           }
 
           StackPage bluetooth_settings_page {
+            name: "settings";
             child: ScrolledWindow bluetooth_status_page {
               propagate-natural-height: true;
               styles ["flat"]
@@ -438,8 +344,81 @@ template $OverskrideWindow: Adw.ApplicationWindow {
               };
             };
           }
+
+          StackPage devices_page {
+            name: "devices";
+            child: ScrolledWindow devices_scroller {
+              styles ["flat"]
+              kinetic-scrolling: true;
+              overlay-scrolling: true;
+              hscrollbar-policy: never;
+
+              child: Adw.Clamp {
+                orientation: horizontal;
+                unit: sp;
+                maximum-size: 760;
+                margin-top: 24;
+                margin-bottom: 24;
+                margin-start: 24;
+                margin-end: 24;
+
+                Box {
+                  orientation: vertical;
+                  valign: start;
+                  spacing: 12;
+
+                  Label devices_heading {
+                    label: _("Devices");
+                    halign: start;
+                    styles ["title-2"]
+                  }
+
+                  Label {
+                    label: _("All the devices you've connected to");
+                    halign: start;
+                    wrap: true;
+                    styles ["dim-label"]
+                  }
+
+                  Box listbox_image_box {
+                    orientation: vertical;
+                    visible: true;
+                    height-request: 220;
+
+                    Box {
+                      valign: center;
+                      halign: center;
+                      vexpand: true;
+                      orientation: vertical;
+                      spacing: 20;
+
+                      Image {
+                        valign: center;
+                        halign: center;
+                        icon-name: "no-bluetooth-symbolic";
+                        pixel-size: 52;
+                        opacity: 0.4;
+                      }
+
+                      Label {
+                        label: _("No devices in range");
+                        opacity: 0.4;
+                      }
+                    }
+                  }
+
+                  ListBox main_listbox {
+                    styles ["boxed-list", "separators"]
+                    selection-mode: single;
+                    valign: start;
+                    visible: false;
+                  }
+                }
+              };
+            };
+          }
         }
-      };
+      }
     };
   };
 }

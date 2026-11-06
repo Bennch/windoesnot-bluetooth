@@ -101,7 +101,7 @@ mod imp {
         #[template_child]
         pub default_controller_expander: TemplateChild<adw::ExpanderRow>,
         #[template_child]
-        pub split_view: TemplateChild<adw::OverlaySplitView>,
+        pub back_button: TemplateChild<gtk::Button>,
         #[template_child]
         pub toast_overlay: TemplateChild<adw::ToastOverlay>,
         #[template_child]
@@ -217,9 +217,66 @@ impl OverskrideWindow {
         win.imp().sidebar_content_box.add_css_class("wdn-sidebar");
         let brand = crate::desktop::brand("Bluetooth");
         win.imp().sidebar_content_box.prepend(&brand);
+        win.setup_navigation();
         win.setup();
 
         win
+    }
+
+    /// The device list is the start page; also used to leave a device or settings.
+    fn show_devices_page(&self) {
+        self.imp().main_listbox.get().unselect_all();
+        self.imp().main_stack.get().set_visible_child_name("devices");
+    }
+
+    /// Left navigation like Store and Network: Devices on top, Settings at the bottom.
+    fn setup_navigation(&self) {
+        let imp = self.imp();
+        let sidebar = imp.sidebar_content_box.get();
+
+        let nav = gtk::ListBox::new();
+        nav.add_css_class("wdn-navigation");
+        nav.set_selection_mode(gtk::SelectionMode::Single);
+        nav.set_activate_on_single_click(true);
+        nav.append(&crate::desktop::nav_row("bluetooth-symbolic", crate::desktop::tr("Devices")));
+        sidebar.append(&nav);
+
+        let spacer = gtk::Box::new(gtk::Orientation::Vertical, 0);
+        spacer.set_vexpand(true);
+        sidebar.append(&spacer);
+
+        let footer = gtk::ListBox::new();
+        footer.add_css_class("wdn-navigation");
+        footer.set_selection_mode(gtk::SelectionMode::Single);
+        footer.set_activate_on_single_click(true);
+        footer.set_margin_bottom(16);
+        footer.append(&crate::desktop::nav_row("emblem-system-symbolic", crate::desktop::tr("Settings")));
+        sidebar.append(&footer);
+
+        let this = self.clone();
+        nav.connect_row_activated(move |_, _| this.show_devices_page());
+        let this = self.clone();
+        footer.connect_row_activated(move |_, _| this.imp().bluetooth_settings_row.get().emit_activate());
+
+        let this = self.clone();
+        imp.back_button.get().connect_clicked(move |_| this.show_devices_page());
+
+        // Highlight, title and back button follow whichever page is shown.
+        let (window_title, back_button) = (imp.window_title.get(), imp.back_button.get());
+        imp.main_stack.get().connect_visible_child_name_notify(move |stack| {
+            let name = stack.visible_child_name();
+            let name = name.as_deref().unwrap_or("devices");
+            if name == "settings" {
+                nav.unselect_all();
+                footer.select_row(footer.row_at_index(0).as_ref());
+                window_title.set_title(crate::desktop::tr("Settings"));
+            } else {
+                footer.unselect_all();
+                nav.select_row(nav.row_at_index(0).as_ref());
+                window_title.set_title(crate::desktop::tr(if name == "device" { "Device" } else { "Devices" }));
+            }
+            back_button.set_visible(name == "device");
+        });
     }
 
     fn setup_settings(&self) {
@@ -401,14 +458,13 @@ impl OverskrideWindow {
 
                         // if the removed device is the same as the currently selected one, return to the settings page
                         if selected {
-                            let bluetooth_settings_row = clone.clone().imp().bluetooth_settings_row.get();
-                            bluetooth_settings_row.emit_activate();
+                            clone.show_devices_page();
                         }
 
                         listbox.invalidate_sort();
                     }
                     Message::SwitchPage(alias, icon_name) => {
-                        // doesn't actually switch a page just updates values in the same page
+                        let opening = alias.is_some() && icon_name.is_some();
                         let entry_row = clone.imp().device_name_entry.get();
                         let device_title = clone.imp().device_title.get();
                         let device_icon = clone.imp().device_icon.get();
@@ -426,20 +482,13 @@ impl OverskrideWindow {
                             println!("icon name is: {}", icon);
                         }
 
-                        let secondary_listbox = clone.imp().secondary_listbox.get();
-                        secondary_listbox.unselect_all();
-
-                        let main_stack = clone.imp().main_stack.get();
-                        let pages = main_stack.pages();
-                        pages.select_item(0, true);
-
-                        let split_view = clone.imp().split_view.get();
-                        if split_view.is_collapsed() {
-                            split_view.set_show_sidebar(false);
+                        // A device opens (alias and icon together) -> show its page.
+                        // Later single updates (rename, icon) only refresh the values.
+                        if opening {
+                            let secondary_listbox = clone.imp().secondary_listbox.get();
+                            secondary_listbox.unselect_all();
+                            clone.imp().main_stack.get().set_visible_child_name("device");
                         }
-
-                        let window_title = clone.imp().window_title.get();
-                        window_title.set_title(crate::desktop::tr("Device"));
                     }
                     Message::SwitchAdapterPowered(powered) => {
                         let powered_switch_row = clone.imp().powered_switch_row.get();
@@ -1044,18 +1093,12 @@ impl OverskrideWindow {
                         if doso {
                             let bluetooth_settings_row = clone.imp().bluetooth_settings_row.get();
                             bluetooth_settings_row.emit_activate();
-
-                            let window_title = clone.imp().window_title.get();
-                            window_title.set_title(crate::desktop::tr("Settings"));
                         } else {
                             let listbox = clone.imp().main_listbox.get();
 
                             if let Some(row) = listbox.row_at_index(0) {
                                 listbox.select_row(Some(&row));
                             }
-
-                            let window_title = clone.imp().window_title.get();
-                            window_title.set_title(crate::desktop::tr("Settings"));
                         }
                     }
                     Message::RequestYesNo(title, subtitle, confirm, response_type) => {
@@ -1736,20 +1779,11 @@ impl OverskrideWindow {
             let main_listbox = self_clone3.imp().main_listbox.get();
             main_listbox.unselect_all();
 
-            // select the bluetooth settings page on startup
-            let main_stack = self_clone3.imp().main_stack.get();
-            let pages = main_stack.pages();
-            pages.select_item(1, true);
-
-            let split_view = self_clone3.imp().split_view.get();
-            if split_view.is_collapsed() {
-                split_view.set_show_sidebar(false);
-            }
-
-            let window_title = self_clone3.imp().window_title.get();
-            window_title.set_title(crate::desktop::tr("Settings"));
+            self_clone3.imp().main_stack.get().set_visible_child_name("settings");
         });
+        // Load the adapter data once; the start page is the device list.
         bluetooth_settings_row.emit_activate();
+        self.show_devices_page();
 
         // choose the file to be sent to the selected device
         let choose_file_button = self.imp().choose_file_button.get();
